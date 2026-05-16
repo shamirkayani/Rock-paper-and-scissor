@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rock Paper Scissors — University Project</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0f;
+      --card: #12121a;
+      --border: #1e1e2e;
+      --accent1: #f5a623;
+      --accent2: #e84393;
+      --accent3: #3de8c8;
+      --text: #eaeaf0;
+      --muted: #6b6b80;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* HERO */
+    .hero {
+      position: relative;
+      padding: 80px 40px 60px;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -100px; left: 50%;
+      transform: translateX(-50%);
+      width: 700px; height: 700px;
+      background: radial-gradient(circle, rgba(245,166,35,0.12) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(245,166,35,0.12);
+      border: 1px solid rgba(245,166,35,0.3);
+      color: var(--accent1);
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      padding: 6px 18px;
+      border-radius: 100px;
+      margin-bottom: 28px;
+      animation: fadeDown 0.6s ease both;
+    }
+
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(56px, 10vw, 110px);
+      line-height: 0.9;
+      letter-spacing: 2px;
+      animation: fadeDown 0.7s ease both;
+    }
+
+    .hero h1 span.r { color: var(--accent1); }
+    .hero h1 span.p { color: var(--accent2); }
+    .hero h1 span.s { color: var(--accent3); }
+
+    .hero-sub {
+      margin-top: 24px;
+      font-size: 16px;
+      color: var(--muted);
+      max-width: 540px;
+      margin-inline: auto;
+      line-height: 1.7;
+      animation: fadeDown 0.85s ease both;
+    }
+
+    .emoji-row {
+      font-size: 48px;
+      margin: 32px 0 0;
+      display: flex;
+      justify-content: center;
+      gap: 24px;
+      animation: fadeDown 1s ease both;
+    }
+
+    .emoji-row span {
+      display: inline-block;
+      animation: float 3s ease-in-out infinite;
+    }
+    .emoji-row span:nth-child(2) { animation-delay: 0.4s; }
+    .emoji-row span:nth-child(3) { animation-delay: 0.8s; }
+
+    /* DIVIDER */
+    .divider {
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border), transparent);
+      margin: 0 0 0;
+    }
+
+    /* SECTION */
+    .section {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 70px 32px;
+    }
+
+    .section-label {
+      font-size: 11px;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--accent1);
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(32px, 5vw, 52px);
+      letter-spacing: 1px;
+      margin-bottom: 20px;
+    }
+
+    .section-text {
+      color: #a0a0b8;
+      font-size: 15.5px;
+      line-height: 1.85;
+      max-width: 680px;
+    }
+
+    /* DESCRIPTION GRID */
+    .desc-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 48px;
+    }
+
+    @media(max-width: 680px) { .desc-grid { grid-template-columns: 1fr; } }
+
+    .desc-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .desc-card:hover {
+      border-color: var(--accent1);
+      transform: translateY(-4px);
+    }
+
+    .desc-card .icon { font-size: 28px; margin-bottom: 14px; }
+    .desc-card h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+    .desc-card p { font-size: 14px; color: var(--muted); line-height: 1.7; }
+
+    /* FEATURES */
+    .features-bg {
+      background: var(--card);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+      margin-top: 48px;
+    }
+
+    .feature-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .feature-card:hover { transform: translateY(-4px); }
+    .feature-card:nth-child(1):hover { border-color: var(--accent1); }
+    .feature-card:nth-child(2):hover { border-color: var(--accent2); }
+    .feature-card:nth-child(3):hover { border-color: var(--accent3); }
+    .feature-card:nth-child(4):hover { border-color: var(--accent1); }
+    .feature-card:nth-child(5):hover { border-color: var(--accent2); }
+    .feature-card:nth-child(6):hover { border-color: var(--accent3); }
+
+    .feature-card .tag {
+      font-size: 10px;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 100px;
+      margin-bottom: 16px;
+      display: inline-block;
+    }
+    .tag-y { background: rgba(245,166,35,0.12); color: var(--accent1); }
+    .tag-p { background: rgba(232,67,147,0.12); color: var(--accent2); }
+    .tag-t { background: rgba(61,232,200,0.12); color: var(--accent3); }
+
+    .feature-card .f-icon { font-size: 30px; margin-bottom: 12px; display: block; }
+    .feature-card h3 { font-size: 15px; font-weight: 600; margin-bottom: 8px; }
+    .feature-card p { font-size: 13px; color: var(--muted); line-height: 1.65; }
+
+    /* OBJECTIVES */
+    .obj-list {
+      margin-top: 48px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .obj-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 22px 24px;
+      transition: border-color 0.3s;
+    }
+    .obj-item:hover { border-color: var(--accent3); }
+
+    .obj-num {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px;
+      color: var(--border);
+      min-width: 44px;
+      line-height: 1;
+    }
+    .obj-item:hover .obj-num { color: var(--accent3); transition: color 0.3s; }
+
+    .obj-content h3 { font-size: 15px; font-weight: 600; margin-bottom: 6px; }
+    .obj-content p { font-size: 13.5px; color: var(--muted); line-height: 1.7; }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 40px 20px;
+      border-top: 1px solid var(--border);
+      font-size: 13px;
+      color: var(--muted);
+    }
+    footer span { color: var(--accent1); }
+
+    /* ANIMATIONS */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-20px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-10px); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="badge">University Project</div>
+    <h1>
+      <span class="r">ROCK</span><br>
+      <span class="p">PAPER</span><br>
+      <span class="s">SCISSORS</span>
+    </h1>
+    <p class="hero-sub">
+      A digital implementation of the classic hand gesture game, built using Object-Oriented Programming in C++ for academic purposes.
+    </p>
+    <div class="emoji-row">
+      <span>🪨</span>
+      <span>📄</span>
+      <span>✂️</span>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- DESCRIPTION -->
+  <div class="section">
+    <p class="section-label">About the Project</p>
+    <h2 class="section-title">Project Description</h2>
+    <p class="section-text">
+      Rock, Paper, Scissors is a turn-based decision game transformed into a fully interactive digital application. The player competes against a computer opponent over multiple rounds, with results tracked in real time. Built using core OOP concepts in C++, this project bridges theory with practical software development.
+    </p>
+
+    <div class="desc-grid">
+      <div class="desc-card">
+        <div class="icon">🎮</div>
+        <h3>What is it?</h3>
+        <p>A digital version of the classic Rock, Paper, Scissors game where a human player competes against a computer in multiple rounds.</p>
+      </div>
+      <div class="desc-card">
+        <div class="icon">💻</div>
+        <h3>How is it built?</h3>
+        <p>Built using C++ with Object-Oriented Programming principles including classes, objects, constructors, and methods.</p>
+      </div>
+      <div class="desc-card">
+        <div class="icon">🤖</div>
+        <h3>The AI Opponent</h3>
+        <p>The computer randomly generates its choice each round using a random number generator, ensuring fair and unbiased gameplay.</p>
+      </div>
+      <div class="desc-card">
+        <div class="icon">📊</div>
+        <h3>Score System</h3>
+        <p>Scores are tracked across all rounds and a final winner is declared at the end of the game based on total round wins.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- FEATURES -->
+  <div class="features-bg">
+    <div class="section">
+      <p class="section-label">What's Included</p>
+      <h2 class="section-title">Key Features</h2>
+      <p class="section-text">
+        Every feature has been designed to make the game functional, user-friendly, and academically relevant.
+      </p>
+
+      <div class="features-grid">
+        <div class="feature-card">
+          <span class="tag tag-y">Gameplay</span>
+          <span class="f-icon">🎯</span>
+          <h3>Interactive Gameplay</h3>
+          <p>Player selects Rock, Paper, or Scissors each round through a simple console input system.</p>
+        </div>
+        <div class="feature-card">
+          <span class="tag tag-p">AI</span>
+          <span class="f-icon">🤖</span>
+          <h3>Computer Opponent</h3>
+          <p>The computer randomly picks a choice every round, ensuring unpredictable and fair competition.</p>
+        </div>
+        <div class="feature-card">
+          <span class="tag tag-t">Scoring</span>
+          <span class="f-icon">🏆</span>
+          <h3>Score Tracking</h3>
+          <p>Wins and losses are recorded and displayed after every round so the player always knows the current standing.</p>
+        </div>
+        <div class="feature-card">
+          <span class="tag tag-y">Rounds</span>
+          <span class="f-icon">🔄</span>
+          <h3>Custom Rounds</h3>
+          <p>Player can choose how many rounds to play before the game begins, making it flexible and replayable.</p>
+        </div>
+        <div class="feature-card">
+          <span class="tag tag-p">Result</span>
+          <span class="f-icon">📋</span>
+          <h3>Instant Feedback</h3>
+          <p>After each round, the result (Win / Lose / Draw) is immediately displayed along with both choices made.</p>
+        </div>
+        <div class="feature-card">
+          <span class="tag tag-t">Final</span>
+          <span class="f-icon">🎖️</span>
+          <h3>Final Result</h3>
+          <p>At the end of all rounds, the overall winner is announced based on the total score accumulated.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- OBJECTIVES -->
+  <div class="section">
+    <p class="section-label">Goals</p>
+    <h2 class="section-title">Project Objectives</h2>
+    <p class="section-text">
+      This project was designed with clear academic and technical goals in mind.
+    </p>
+
+    <div class="obj-list">
+      <div class="obj-item">
+        <div class="obj-num">01</div>
+        <div class="obj-content">
+          <h3>Build a Functional Game</h3>
+          <p>Design and develop a complete Rock, Paper, Scissors game that runs correctly from start to finish without errors.</p>
+        </div>
+      </div>
+      <div class="obj-item">
+        <div class="obj-num">02</div>
+        <div class="obj-content">
+          <h3>Apply OOP Concepts</h3>
+          <p>Use Object-Oriented Programming principles such as classes, objects, constructors, and methods in a real project.</p>
+        </div>
+      </div>
+      <div class="obj-item">
+        <div class="obj-num">03</div>
+        <div class="obj-content">
+          <h3>Implement Game Logic</h3>
+          <p>Write accurate win, lose, and draw conditions based on the standard rules of Rock, Paper, Scissors.</p>
+        </div>
+      </div>
+      <div class="obj-item">
+        <div class="obj-num">04</div>
+        <div class="obj-content">
+          <h3>Handle User Input</h3>
+          <p>Accept and validate player input properly, handling invalid entries without crashing the program.</p>
+        </div>
+      </div>
+      <div class="obj-item">
+        <div class="obj-num">05</div>
+        <div class="obj-content">
+          <h3>Display Clear Output</h3>
+          <p>Show round results, scores, and the final winner in a clean, readable format after each round and at game end.</p>
+        </div>
+      </div>
+      <div class="obj-item">
+        <div class="obj-num">06</div>
+        <div class="obj-content">
+          <h3>Demonstrate Programming Skills</h3>
+          <p>Produce a well-structured, working C++ program that reflects understanding of programming fundamentals learned in class.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <p>Rock Paper Scissors &nbsp;|&nbsp; <span>University Project</span> &nbsp;|&nbsp; Built with C++ &amp; OOP</p>
+  </footer>
+
+</body>
+</html>
